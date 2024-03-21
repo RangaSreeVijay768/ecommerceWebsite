@@ -24,7 +24,7 @@ const Header = () => {
     }
     return (
         <>
-            <nav className="navbar navbar-expand-lg bg-body-tertiary px-2">
+            <nav className="navbar navbar-expand-lg position-fixed fixed-top bg-body-tertiary px-2">
                 <div className="container-fluid">
                     <button
                         className="navbar-toggler"
@@ -41,7 +41,7 @@ const Header = () => {
                         <Link to="/" className="navbar-brand">
                             🛒 Ecommerce App
                         </Link>
-                        <div className="d-flex justify-content-center ms-auto me-auto">
+                        <div className="col-md-3 my-2 ms-auto me-auto">
                             <SearchInput/>
                         </div>
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
@@ -82,7 +82,7 @@ const Header = () => {
                                                     id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"
                                                     alt={auth?.user?.name} src={"images"}/>
                                             <div className="dropdown-menu dropdown-menu-end">
-                                                <li><a className="dropdown-item" href="/dashboard/user/profile">Profile</a></li>
+                                                <li><a className="dropdown-item" href={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}/profile`}>Profile</a></li>
                                                 <li><a className="dropdown-item"
                                                        href={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}>Dashboard </a>
                                                 </li>

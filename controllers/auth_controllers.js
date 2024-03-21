@@ -5,7 +5,7 @@ import {comparePassword, hashPassword} from "../helpers/auth_helper.js";
 
 export const registerController = async (req, res) => {
     try {
-        const { name, email, password, phone, address, answer } = req.body;
+        const { name, email, password, passwordAgain, phone, address, answer } = req.body;
         //validations
         if (!name) {
             return res.send({ error: "Name is Required" });
@@ -43,6 +43,7 @@ export const registerController = async (req, res) => {
             phone,
             address,
             password: hashedPassword,
+            passwordAgain: password,
             answer,
         }).save();
 
@@ -117,37 +118,37 @@ export const loginController = async (req, res) => {
 
 export const forgotPasswordController = async (req, res) => {
     try {
-        const {email, answer, newPassword} = req.body;
+        const { email, answer, newPassword, passwordAgain } = req.body;
         if (!email) {
-            return res.send({ message: "Email is Required" });
+            res.status(400).send({ message: "Emai is required" });
         }
         if (!answer) {
-            return res.send({ message: "answer is Required" });
+            res.status(400).send({ message: "answer is required" });
         }
         if (!newPassword) {
-            return res.send({ message: "Password is Required" });
+            res.status(400).send({ message: "New Password is required" });
         }
-    //     check
-        const user = await userModel.findOne({email, answer})
-    //     validation
-        if(!user){
+        //check
+        const user = await userModel.findOne({ email, answer });
+        //validation
+        if (!user) {
             return res.status(404).send({
                 success: false,
-                message: "email or answer is wrong"
-            })
+                message: "Wrong Email Or Answer",
+            });
         }
-        // const hashed = await hashPassword(newPassword);
-        await userModel.findByIdAndUpdate(user._id, {password: newPassword});
+        const hashed = await hashPassword(newPassword);
+        await userModel.findByIdAndUpdate(user._id, { password: hashed, passwordAgain: newPassword }, );
         res.status(200).send({
             success: true,
-            message: "Password changed successfully",
-            user,
+            message: "Password Reset Successfully",
+            user
         });
     } catch (error) {
         console.log(error);
         res.status(500).send({
             success: false,
-            message: "Error in Registration",
+            message: "Something went wrong",
             error,
         });
     }
@@ -158,7 +159,7 @@ export const forgotPasswordController = async (req, res) => {
 //update prfole
 export const updateProfileController = async (req, res) => {
     try {
-        const { name, email, password, address, phone } = req.body;
+        const { name, email, password, address, phone, passwordAgain } = req.body;
         const user = await userModel.findById(req.user._id);
         //password
         if (password && password.length < 6) {
@@ -171,6 +172,7 @@ export const updateProfileController = async (req, res) => {
                 password: password || user.password,
                 phone: phone || user.phone,
                 address: address || user.address,
+                passwordAgain: passwordAgain || user.password
             },
             { new: true }
         );
@@ -188,6 +190,52 @@ export const updateProfileController = async (req, res) => {
         });
     }
 };
+
+// update user by admin
+// PUT Update User
+export const updateUserController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { role } = req.body;
+
+        // Validation
+        // if (!name || !email || !phone || !address || !role) {
+        //     return res.status(400).send({
+        //         success: false,
+        //         message: "Name, email, phone, and address are required fields",
+        //     });
+        // }
+
+        // Check if user exists
+        const user = await userModel.findById(id);
+        if (!user) {
+            return res.status(404).send({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        // Update user fields
+        user.role = role;
+
+        // Save updated user
+        await user.save();
+
+        res.status(200).send({
+            success: true,
+            message: "User updated successfully",
+            user,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error while updating user",
+            error,
+        });
+    }
+};
+
 
 
 //delete user

@@ -36,7 +36,7 @@ const CategoryResults = () => {
                                 <div className="card m-2" key={p._id}>
                                     <img
                                         src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
-                                        className="card-img-top"
+                                        className="img-fill p-2 rounded-2 h-50px"
                                         alt={p.name}
                                     />
                                     <div className="card-body">
@@ -59,19 +59,6 @@ const CategoryResults = () => {
                                             >
                                                 More Details
                                             </button>
-                                            {/* <button
-                    className="btn btn-dark ms-1"
-                    onClick={() => {
-                      setCart([...cart, p]);
-                      localStorage.setItem(
-                        "cart",
-                        JSON.stringify([...cart, p])
-                      );
-                      toast.success("Item Added to cart");
-                    }}
-                  >
-                    ADD TO CART
-                  </button> */}
                                         </div>
                                     </div>
                                 </div>

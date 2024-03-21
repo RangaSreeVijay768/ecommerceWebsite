@@ -40,9 +40,9 @@ function Login() {
 
     return (
         <Layout>
-            <div className="form-container">
+            <div className="form-container mt-60px">
 
-                <form onSubmit={handleLoginSubmit}>
+                <form onSubmit={handleLoginSubmit} className="col-md-3">
                     <h2 className="mb-3">Login form</h2>
                     <div className="mb-3 form-group">
                         <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>

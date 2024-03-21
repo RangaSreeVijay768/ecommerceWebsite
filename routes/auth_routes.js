@@ -7,7 +7,7 @@ import {
     updateProfileController,
     getOrdersController,
     getAllOrdersController,
-    orderStatusController, getAllUsersController, deleteUserController,
+    orderStatusController, getAllUsersController, deleteUserController, updateUserController,
 } from "../controllers/auth_controllers.js";
 import { isAdmin, requireSignIn } from "../middlewares/auth_middleware.js";
 
@@ -42,6 +42,9 @@ router.get("/all-users", requireSignIn, isAdmin, getAllUsersController);
 
 //update profile
 router.put("/profile", requireSignIn, updateProfileController);
+
+//update profile
+router.put("/update/:id", requireSignIn, isAdmin, updateUserController);
 
 // Delete user || DELETE
 router.delete("/delete/:id", requireSignIn, deleteUserController)

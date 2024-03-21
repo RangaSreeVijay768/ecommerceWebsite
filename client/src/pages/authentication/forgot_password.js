@@ -32,9 +32,9 @@ function ForgotPassword() {
 
     return (
         <Layout title={"Forgot Password - Ecommerce app"}>
-            <div className="form-container">
+            <div className="form-container mt-60px">
 
-                <form onSubmit={handleForgotPasswordSubmit}>
+                <form onSubmit={handleForgotPasswordSubmit} className="col-md-3">
                     <h2 className="mb-3">Reset Password</h2>
                     <div className="mb-3 form-group">
                         <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
@@ -58,7 +58,6 @@ function ForgotPassword() {
                                className="form-control" id="exampleInputNewPassword1"
                                placeholder="Password"/>
                     </div>
-
 
                     <button type="submit" className="btn btn-primary">Reset</button>
                 </form>

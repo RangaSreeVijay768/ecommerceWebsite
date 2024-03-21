@@ -3,10 +3,13 @@ import Layout from "./../components/Layout/Layout";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "../styles/product_details.css";
+import toast from "react-hot-toast";
+import {useCart} from "../context/cart";
 
 const ProductDetails = () => {
     const params = useParams();
     const navigate = useNavigate();
+    const [cart, setCart] = useCart();
     const [product, setProduct] = useState({});
     const [relatedProducts, setRelatedProducts] = useState([]);
 
@@ -62,7 +65,23 @@ const ProductDetails = () => {
                         })}
                     </h6>
                     <h6>Category : {product?.category?.name}</h6>
-                    <button class="btn btn-secondary ms-1">ADD TO CART</button>
+                    <button class="btn btn-secondary ms-1"
+                            onClick={() => {
+                                const isInCart = cart.some(item => item._id === product._id); // Check if product is already in cart
+                                if (isInCart) {
+                                    navigate('/cart'); // Redirect to cart page if product is already in cart
+                                } else {
+                                    setCart([...cart, product]);
+                                    localStorage.setItem(
+                                        "cart",
+                                        JSON.stringify([...cart, product])
+                                    );
+                                    toast.success("Item Added to cart");
+                                }
+                            }}
+                    >
+                        {cart.some(item => item._id === product._id) ? "GO TO CART" : "ADD TO CART"}
+                    </button>
                 </div>
             </div>
             <hr />
@@ -76,7 +95,7 @@ const ProductDetails = () => {
                         <div className="card m-2" key={p._id}>
                             <img
                                 src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
-                                className="card-img-top"
+                                className="img-fill p-2 rounded-2 h-50px"
                                 alt={p.name}
                             />
                             <div className="card-body">

@@ -1,8 +1,11 @@
 import React from "react";
 import Layout from "./../components/Layout/Layout";
 import { useSearch } from "../context/search";
+import {useNavigate} from "react-router-dom";
 const Search = () => {
     const [values, setValues] = useSearch();
+    const navigate = useNavigate();
+
     return (
         <Layout title={"Search results"}>
             <div className="container">
@@ -18,7 +21,7 @@ const Search = () => {
                             <div className="card m-2" style={{ width: "18rem" }}>
                                 <img
                                     src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
-                                    className="card-img-top"
+                                    className="img-fill p-2 rounded-2 h-50px"
                                     alt={p.name}
                                 />
                                 <div className="card-body">
@@ -27,8 +30,14 @@ const Search = () => {
                                         {p.description.substring(0, 30)}...
                                     </p>
                                     <p className="card-text"> $ {p.price}</p>
-                                    <button class="btn btn-primary ms-1">More Details</button>
-                                    <button class="btn btn-secondary ms-1">ADD TO CART</button>
+                                    <div className="">
+                                        <button
+                                            className="btn btn-info ms-1 w-100"
+                                            onClick={() => navigate(`/product/${p.slug}`)}
+                                        >
+                                            More Details
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}

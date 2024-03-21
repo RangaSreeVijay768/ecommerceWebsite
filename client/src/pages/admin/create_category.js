@@ -89,13 +89,13 @@ function CreateCategory() {
 
     return (
         <Layout>
-            <div className="row m-3 p-3">
-                <div className="col-3">
+            <div className="row mt-100px m-3 p-3">
+                <div className="col-md-3">
                     <AdminMenu/>
                 </div>
-                <div className="col-md-9">
+                <div className="col-md-9 mt-4">
                     <h1>Manage Category</h1>
-                    <div className="p-3 w-50">
+                    <div className="p-3">
                         <CategoryForm
                             handleSubmit={handleSubmit}
                             value={name}
@@ -103,7 +103,7 @@ function CreateCategory() {
 
                         />
                     </div>
-                    <div className="w-75">
+                    <div className="">
                         <table className="table">
                             <thead>
                             <tr>

@@ -8,6 +8,7 @@ import {AiFillWarning} from "react-icons/ai";
 import axios from "axios";
 import toast from "react-hot-toast";
 import "../styles/cart_styles.css";
+import AdminMenu from "../components/Layout/AdminMenu";
 
 const CartPage = () => {
     const [auth, setAuth] = useAuth();
@@ -79,10 +80,11 @@ const CartPage = () => {
         }
     };
     return (
+
         <Layout>
-            <div className=" cart-page">
-                <div className="row">
-                    <div className="col-md-12">
+            <div className="row mt-85px m-1">
+                <div className="row mx-0 px-0">
+                    <div className="col-md-12 px-0">
                         <h1 className="text-center bg-light p-2 mb-1">
                             {!auth?.user
                                 ? "Hello Guest"
@@ -97,108 +99,116 @@ const CartPage = () => {
                         </h1>
                     </div>
                 </div>
-                <div className="container ">
-                    <div className="row ">
-                        <div className="col-md-7  p-0 m-0">
-                            {cart?.map((p) => (
-                                <div className="row card flex-row" key={p._id}>
-                                    <div className="col-md-4">
-                                        <img
-                                            src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
-                                            className="card-img-top"
-                                            alt={p.name}
-                                            width="100%"
-                                            height={"130px"}
-                                        />
-                                    </div>
-                                    <div className="col-md-4">
-                                        <p>{p.name}</p>
-                                        <p>{p.description.substring(0, 30)}</p>
-                                        <p>Price : {p.price}</p>
-                                    </div>
-                                    <div className="col-md-4 cart-remove-btn">
-                                        <button
-                                            className="btn btn-danger"
-                                            onClick={() => removeCartItem(p._id)}
-                                        >
-                                            Remove
-                                        </button>
-                                    </div>
+                <div className="row ms-1 me-3 justify-content-center container-fluid">
+                    <div className="col-md-4 ps-0 pe-3 mt-2">
+                        {cart?.map((p) => (
+                            <div className="row border border-2 border-primary rounded-2 p-4 mb-1" key={p._id}>
+                                <div className="col-md-4">
+                                    <img
+                                        src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
+                                        className="card-img-top"
+                                        alt={p.name}
+                                        width="100%"
+                                        height={"130px"}
+                                    />
                                 </div>
-                            ))}
-                        </div>
-                        <div className="col-md-5 cart-summary ">
+                                <div className="col-md-4">
+                                    <p>{p.name}</p>
+                                    <p>{p.description.substring(0, 30)}</p>
+                                    <p>Price : {p.price}</p>
+                                </div>
+                                <div className="col-md-4 cart-remove-btn">
+                                    <button
+                                        className="btn btn-danger"
+                                        onClick={() => removeCartItem(p._id)}
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="col-md-4 flex-column align-items-center
+                     border border-2 border-primary rounded-2 px-0 me-3 d-flex cart-summary my-2">
+                        <div className="border-2 border-bottom border-primary w-100 text-center px-0">
                             <h2>Cart Summary</h2>
-                            <p>Total | Checkout | Payment</p>
-                            <hr/>
-                            <h4>Total : {totalPrice()} </h4>
-                            {auth?.user?.address ? (
-                                <>
-                                    <div className="mb-3">
-                                        <h4>Current Address</h4>
-                                        <h5>{auth?.user?.address}</h5>
-                                        <button
-                                            className="btn btn-outline-warning"
-                                            onClick={() => navigate("/dashboard/user/profile")}
-                                        >
-                                            Update Address
-                                        </button>
-                                    </div>
-                                </>
-                            ) : (
+                            <p className="">Total | Checkout | Payment</p>
+                        </div>
+                        <hr/>
+                        <h4>Total : {totalPrice()} </h4>
+                        {auth?.user?.address ? (
+                            <>
                                 <div className="mb-3">
-                                    {auth?.token ? (
-                                        <button
-                                            className="btn btn-outline-warning"
-                                            onClick={() => navigate("/dashboard/user/profile")}
-                                        >
-                                            Update Address
-                                        </button>
-                                    ) : (
-                                        <button
-                                            className="btn btn-outline-warning"
-                                            onClick={() =>
-                                                navigate("/login", {
-                                                    state: "/cart",
-                                                })
-                                            }
-                                        >
-                                            Plase Login to checkout
-                                        </button>
-                                    )}
+                                    <h4>Current Address</h4>
+                                    <h5>{auth?.user?.address}</h5>
+                                    <button
+                                        className="btn btn-outline-warning"
+                                        onClick={() => navigate("/dashboard/user/profile")}
+                                    >
+                                        Update Address
+                                    </button>
                                 </div>
-                            )}
-                            <div className="mt-2">
-                                {!clientToken || !auth?.token || !cart?.length ? (
-                                    ""
+                            </>
+                        ) : (
+                            <div className="mb-3">
+                                {auth?.token ? (
+                                    <button
+                                        className="btn btn-outline-warning"
+                                        onClick={() => navigate("/dashboard/user/profile")}
+                                    >
+                                        Update Address
+                                    </button>
                                 ) : (
-                                    <>
-                                        <DropIn
-                                            options={{
-                                                authorization: clientToken,
-                                                paypal: {
-                                                    flow: "vault",
-                                                },
-                                            }}
-                                            onInstance={(instance) => setInstance(instance)}
-                                        />
-
-                                        <button
-                                            className="btn btn-primary"
-                                            onClick={handlePayment}
-                                            disabled={loading || !instance || !auth?.user?.address}
-                                        >
-                                            {loading ? "Processing ...." : "Make Payment"}
-                                        </button>
-                                    </>
+                                    <button
+                                        className="btn btn-outline-warning"
+                                        onClick={() =>
+                                            navigate("/login", {
+                                                state: "/cart",
+                                            })
+                                        }
+                                    >
+                                        Plase Login to checkout
+                                    </button>
                                 )}
                             </div>
+                        )}
+                        <div className="mt-2 p-3">
+                            {!clientToken || !auth?.token || !cart?.length ? (
+                                ""
+                            ) : (
+                                <>
+                                    <DropIn
+                                        options={{
+                                            authorization: clientToken,
+                                            paypal: {
+                                                flow: "vault",
+                                            },
+                                        }}
+                                        onInstance={(instance) => setInstance(instance)}
+                                    />
+
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={handlePayment}
+                                        disabled={loading || !instance || !auth?.user?.address}
+                                    >
+                                        {loading ? "Processing ...." : "Make Payment"}
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
         </Layout>
-    );
+
+
+        // <Layout>
+        //     <div className=" cart-page">
+        //     </div>
+        // </Layout>
+    )
+        ;
 };
 
 export default CartPage;

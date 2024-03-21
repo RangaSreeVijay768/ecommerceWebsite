@@ -27,8 +27,9 @@ const Orders = () => {
                     <div className="col-md-3">
                         <UserMenu />
                     </div>
-                    <div className="col-md-9">
+                    <div className="col-md-9 mt-4">
                         <h1 className="text-center">All Orders</h1>
+                        {orders?.length === 0 ? <div className="text-center mt-100px">you haven't create any orders yet</div>: <div></div>}
                         {orders?.map((o, i) => {
                             return (
                                 <div className="border shadow">

@@ -35,8 +35,8 @@ const Register = () => {
 
 
     return (<Layout title={"Registration page"}>
-            <div className="form-container">
-                <form onSubmit={handleRegisterSubmit} className="">
+            <div className="form-container mt-60px">
+                <form onSubmit={handleRegisterSubmit} className="col-md-3">
                     <h2 className="mb-3">Registration form</h2>
                     <div className="mb-3 form-group">
                         <label htmlFor="exampleInputName1" className="form-label">Name</label>

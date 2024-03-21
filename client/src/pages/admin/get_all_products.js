@@ -44,11 +44,11 @@ function Products() {
         getAllProducts();
     }, []);
     return (<Layout>
-            <div className="row m-3 p-3">
-                <div className="col-3">
+            <div className="row mt-100px m-3 p-3">
+                <div className="col-md-3">
                     <AdminMenu/>
                 </div>
-                <div className="col-md-9 ">
+                <div className="col-md-9 mt-4">
                     <h1 className="text-center">All Products List</h1>
                     <div className="d-flex flex-wrap">
                         {products?.map((p) => (<Link
@@ -58,7 +58,7 @@ function Products() {
                                 <div className="card m-2" style={{width: "18rem"}}>
                                     <img
                                         src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
-                                        className="card-img-top"
+                                        className="img-fill p-2 rounded-2 h-50px"
                                         alt={p.name}
                                     />
                                     <div className="card-body">

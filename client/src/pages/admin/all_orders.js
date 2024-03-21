@@ -44,8 +44,8 @@ const AllOrders = () => {
     };
     return (
         <Layout>
-            <div className="row m-3 p-3">
-                <div className="col-3">
+            <div className="row mt-100px m-3 p-3">
+                <div className="col-md-3">
                     <AdminMenu/>
                 </div>
                 <div className="col-md-9">
@@ -87,7 +87,7 @@ const AllOrders = () => {
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div className="container">
+                                <div className="container-fluid">
                                     {o?.products?.map((p, i) => (
                                         <div className="row mb-2 p-3 card flex-row" key={p._id}>
                                             <div className="col-md-4">
