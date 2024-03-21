@@ -1,16 +1,14 @@
 import userModel from "../models/user_model.js";
-// import { comparePassword, hashPassword } from "./../helpers/auth_helper.js";
 import JWT from "jsonwebtoken";
 import orderModel from "../models/order_model.js";
-import fs from "fs";
-import {comparePassword} from "../helpers/auth_helper.js";
+import {comparePassword, hashPassword} from "../helpers/auth_helper.js";
 
 export const registerController = async (req, res) => {
     try {
         const { name, email, password, phone, address, answer } = req.body;
         //validations
         if (!name) {
-            return res.send({ message: "Name is Required" });
+            return res.send({ error: "Name is Required" });
         }
         if (!email) {
             return res.send({ message: "Email is Required" });
@@ -27,25 +25,24 @@ export const registerController = async (req, res) => {
         if (!answer) {
             return res.send({ message: "Answer is Required" });
         }
-
         //check user
-        const existingUser = await userModel.findOne({ email });
+        const exisitingUser = await userModel.findOne({ email });
         //exisiting user
-        if (existingUser) {
+        if (exisitingUser) {
             return res.status(200).send({
-                success: true,
+                success: false,
                 message: "Already Register please login",
             });
         }
         //register user
-        // const hashedPassword = await hashPassword(password);
+        const hashedPassword = await hashPassword(password);
         //save
         const user = await new userModel({
             name,
             email,
             phone,
             address,
-            password,
+            password: hashedPassword,
             answer,
         }).save();
 
@@ -58,13 +55,13 @@ export const registerController = async (req, res) => {
         console.log(error);
         res.status(500).send({
             success: false,
-            message: "Error in Registration",
+            message: "Errro in Registeration",
             error,
         });
     }
 };
 
-
+//POST LOGIN
 export const loginController = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -103,7 +100,7 @@ export const loginController = async (req, res) => {
                 email: user.email,
                 phone: user.phone,
                 address: user.address,
-                role: user.role
+                role: user.role,
             },
             token,
         });
