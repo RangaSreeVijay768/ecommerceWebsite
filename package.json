@@ -15,7 +15,6 @@
   "license": "ISC",
   "dependencies": {
     "antd": "^5.15.3",
-    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "braintree": "^3.22.0",
