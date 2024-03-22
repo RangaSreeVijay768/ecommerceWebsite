@@ -348,34 +348,47 @@ export const braintreeTokenController = async (req, res) => {
 //payment
 export const brainTreePaymentController = async (req, res) => {
     try {
-        const { nonce, cart } = req.body;
+        const { paymentMethod, nonce, cart } = req.body;
         let total = 0;
-        cart.map((i) => {
-            total += i.price;
+        cart.forEach((item) => {
+            total += item.price;
         });
-        let newTransaction = gateway.transaction.sale(
-            {
-                amount: total,
-                paymentMethodNonce: nonce,
-                options: {
-                    submitForSettlement: true,
+
+        if (paymentMethod === 'COD') {
+            // If payment method is Cash on Delivery (COD)
+            const order = new orderModel({
+                products: cart,
+                buyer: req.user._id,
+                payment: "COD"
+            }).save();
+            res.json({ ok: true, message: 'Order placed successfully via Cash on Delivery.' });
+        } else {
+            // For other payment methods
+            let newTransaction = gateway.transaction.sale(
+                {
+                    amount: total,
+                    paymentMethodNonce: nonce,
+                    options: {
+                        submitForSettlement: true,
+                    },
                 },
-            },
-            function (error, result) {
-                if (result) {
-                    const order = new orderModel({
-                        products: cart,
-                        payment: result,
-                        buyer: req.user._id,
-                    }).save();
-                    res.json({ ok: true });
-                } else {
-                    res.status(500).send(error);
+                function (error, result) {
+                    if (result) {
+                        const order = new orderModel({
+                            products: cart,
+                            payment: result,
+                            buyer: req.user._id,
+                        }).save();
+                        res.json({ ok: true, message: 'Order placed successfully with payment.' });
+                    } else {
+                        res.status(500).send(error);
+                    }
                 }
-            }
-        );
+            );
+        }
     } catch (error) {
         console.log(error);
+        res.status(500).send('Internal Server Error');
     }
 };
 

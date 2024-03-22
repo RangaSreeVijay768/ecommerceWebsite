@@ -24,6 +24,7 @@ import SearchResultsPage from "./pages/SearchResultsPage";
 import AllCategories from "./pages/AllCategories";
 import CategoryResults from "./pages/CategoryResultsPage";
 import AllOrders from "./pages/admin/all_orders";
+import OrderDetails from "./pages/user/order_details";
 
 function App() {
     return (
@@ -43,6 +44,7 @@ function App() {
                     <Route path="user" element={<UserDashboard/>}/>
                     <Route path="user/profile" element={<Profile/>}/>
                     <Route path="user/orders" element={<Orders/>}/>
+                    <Route path="user/orders/:id" element={<OrderDetails/>}/>
                 </Route>
                 <Route path="/dashboard" element={<AdminRoutes/>}>
                     <Route path="admin" element={<AdminDashboard/>}/>

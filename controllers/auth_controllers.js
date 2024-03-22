@@ -259,7 +259,7 @@ export const deleteUserController = async (req, res) => {
 
 
 //orders
-export const getOrdersController = async (req, res) => {
+export const getOrdersByUserController = async (req, res) => {
     try {
         const orders = await orderModel
             .find({ buyer: req.user._id })
@@ -294,6 +294,29 @@ export const getAllOrdersController = async (req, res) => {
     }
 };
 
+//order details
+export const getOrderByIdController = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+
+        const order = await orderModel
+            .findById(orderId)
+            .populate("products", "-photo")
+            .populate("buyer", "name")
+            .sort();
+        res.json(order);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error WHile Geting Orders",
+            error,
+        });
+    }
+};
+
+
+
 //order status
 export const orderStatusController = async (req, res) => {
     try {
@@ -302,6 +325,25 @@ export const orderStatusController = async (req, res) => {
         const orders = await orderModel.findByIdAndUpdate(
             orderId,
             { status },
+            { new: true }
+        );
+        res.json(orders);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error While Updateing Order",
+            error,
+        });
+    }
+};
+
+// Delete order
+export const deleteOrderController = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const orders = await orderModel.findByIdAndDelete(
+            orderId,
             { new: true }
         );
         res.json(orders);

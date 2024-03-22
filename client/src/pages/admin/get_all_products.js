@@ -22,20 +22,6 @@ function Products() {
         }
     };
 
-    const handleDelete = async (id) => {
-        try {
-            let answer = window.prompt("Are You Sure want to delete this product ? ");
-            if (!answer) return;
-            const { data } = await axios.delete(
-                `${process.env.REACT_APP_API}/api/v1/product/delete/${id}`
-            );
-            toast.success("Product DEleted Succfully");
-            navigate(`/dashboard/admin/products`);
-        } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
-        }
-    };
 
 
 

@@ -16,6 +16,7 @@ const CartPage = () => {
     const [clientToken, setClientToken] = useState("");
     const [instance, setInstance] = useState("");
     const [loading, setLoading] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState("Braintree"); // Default payment method
     const navigate = useNavigate();
 
     //total price
@@ -64,11 +65,17 @@ const CartPage = () => {
     const handlePayment = async () => {
         try {
             setLoading(true);
-            const {nonce} = await instance.requestPaymentMethod();
-            const {data} = await axios.post(`${process.env.REACT_APP_API}/api/v1/product/braintree/payment`, {
-                nonce,
-                cart,
-            });
+            if (paymentMethod === "Braintree") {
+                const { nonce } = await instance.requestPaymentMethod();
+                await axios.post(`${process.env.REACT_APP_API}/api/v1/product/braintree/payment`, {
+                    nonce,
+                    cart,
+                });
+            } else if (paymentMethod === "COD") {
+                await axios.post(`${process.env.REACT_APP_API}/api/v1/product/braintree/payment`, {
+                    cart,
+                });
+            }
             setLoading(false);
             localStorage.removeItem("cart");
             setCart([]);
@@ -79,6 +86,7 @@ const CartPage = () => {
             setLoading(false);
         }
     };
+
     return (
 
         <Layout>
@@ -173,29 +181,53 @@ const CartPage = () => {
                             </div>
                         )}
                         <div className="mt-2 p-3">
-                            {!clientToken || !auth?.token || !cart?.length ? (
-                                ""
-                            ) : (
-                                <>
-                                    <DropIn
-                                        options={{
-                                            authorization: clientToken,
-                                            paypal: {
-                                                flow: "vault",
-                                            },
-                                        }}
-                                        onInstance={(instance) => setInstance(instance)}
-                                    />
+                            <div className="mb-3">
+                                <label>Select Payment Method:</label>
+                                <select
+                                    className="form-select"
+                                    value={paymentMethod}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                >
+                                    <option value="Braintree">Braintree</option>
+                                    <option value="COD">Cash on Delivery</option>
+                                </select>
+                            </div>
+                            {paymentMethod === "Braintree"
+                                ? (<div>
+                                    {!clientToken || !auth?.token || !cart?.length ? (
+                                        ""
+                                    ) : (
+                                        <>
+                                            <DropIn
+                                                options={{
+                                                    authorization: clientToken,
+                                                    paypal: {
+                                                        flow: "vault",
+                                                    },
+                                                }}
+                                                onInstance={(instance) => setInstance(instance)}
+                                            />
 
+                                            <button
+                                                className="btn btn-primary"
+                                                onClick={handlePayment}
+                                                disabled={loading || !instance || !auth?.user?.address}
+                                            >
+                                                {loading ? "Processing ...." : "Make Payment"}
+                                            </button>
+                                        </>
+                                    )}
+                                </div>)
+                                : (<div>
                                     <button
-                                        className="btn btn-primary"
+                                        className="btn btn-success mt-2"
                                         onClick={handlePayment}
-                                        disabled={loading || !instance || !auth?.user?.address}
+                                        disabled={loading || !auth?.user?.address}
                                     >
-                                        {loading ? "Processing ...." : "Make Payment"}
+                                        {loading ? "Processing ...." : "Cash on Delivery"}
                                     </button>
-                                </>
-                            )}
+                                </div>)
+                            }
                         </div>
                     </div>
                 </div>

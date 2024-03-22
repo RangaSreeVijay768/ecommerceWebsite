@@ -5,6 +5,8 @@ import Layout from "../../components/Layout/Layout";
 import {useAuth} from "../../context/auth";
 import moment from "moment";
 import {Select} from "antd";
+import Button from "react-bootstrap/Button";
+import {toast} from "react-toastify";
 
 const {Option} = Select;
 
@@ -42,6 +44,18 @@ const AllOrders = () => {
             console.log(error);
         }
     };
+
+    const handleDelete = async (orderId) => {
+        try {
+            const {data} = await axios.delete(`${process.env.REACT_APP_API}/api/v1/auth/deleteOrder/${orderId}`);
+            getOrders();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
+
     return (
         <Layout>
             <div className="row mt-100px m-3 p-3">
@@ -82,8 +96,11 @@ const AllOrders = () => {
                                         </td>
                                         <td>{o?.buyer?.name}</td>
                                         <td>{moment(o?.createAt).fromNow()}</td>
-                                        <td>{o?.payment.success ? "Success" : "Failed"}</td>
+                                        <td>{o?.payment.success ? "Online" : "Cash on Delivery"}</td>
                                         <td>{o?.products?.length}</td>
+                                        <td>
+                                            <Button variant="danger" onClick={() => handleDelete(o._id)}>Delete</Button>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -106,6 +123,15 @@ const AllOrders = () => {
                                             </div>
                                         </div>
                                     ))}
+                                    {/*<Button className="btn btn-danger" onClick={() => handleDelete(o._id)}>*/}
+                                    {/*    Delete order*/}
+                                    {/*</Button>*/}
+                                    <button
+                                        className="btn btn-danger"
+                                        onClick={() => handleDelete(o._id)}
+                                    >
+                                        Delete Order
+                                    </button>
                                 </div>
                             </div>
                         );

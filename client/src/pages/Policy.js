@@ -4,7 +4,7 @@ import Layout from "./../components/Layout/Layout";
 const Policy = () => {
   return (
     <Layout title={"privacy policy - Ecommerce app"}>
-      <div className="row contactus ">
+      <div className="row mt-100px contactus ">
         <div className="col-md-6 ">
           <img
             src="/images/contactus.jpeg"
