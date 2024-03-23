@@ -35,7 +35,23 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
     },
   },
-  { timestamps: true }
+  { timestamps: true,
+      toJSON: {
+          transform: function (doc, ret) {
+              ret.id = ret._id;
+              delete ret.__v;
+          },
+      },
+  }
 );
+
+// // Set the id field to be an alias of _id
+// productSchema.virtual('id').get(function() {
+//     return this._id.toHexString();
+// });
+//
+// productSchema.set('toJSON', {
+//     virtuals: true,
+// });
 
 export default mongoose.model("products", productSchema);
