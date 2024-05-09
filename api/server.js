@@ -2,12 +2,12 @@ import express from "express";
 import colors from "colors";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import connectDB from "./config/db.js";
-import authRoutes from "./routes/auth_routes.js";
-import categoryRoutes from "./routes/categoty_routes.js";
+import connectDB from "../config/db.js";
+import authRoutes from "../routes/auth_routes.js";
+import categoryRoutes from "../routes/categoty_routes.js";
 import cors from "cors";
-import productRoutes from "./routes/product_routes.js";
-import path from "path"
+import productRoutes from "../routes/product_routes.js";
+import pdfRoutes from "../routes/pdf_routes.js";
 
 //configure env
 dotenv.config();
@@ -31,6 +31,7 @@ app.use(morgan("dev"));
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/pdf", pdfRoutes);
 
 // //rest api
 // app.use("*", function(req, res) {
