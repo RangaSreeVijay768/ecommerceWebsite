@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Html form to upload files to drive</title>
+</head>
+
+<body>
+<form>
+    <input type="file" multiple name="files" required>
+    <input type="text" name="Name" placeholder="enter name">
+    <input type="email" name="email" placeholder="enter email">
+    <input type="text" name="country" placeholder="enter country">
+    <input type="submit" value="upload files">
+</form>
+</body>
+<script>
+    let formElem = document.querySelector('form');
+    formElem.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await fetch('/api/v1/pdf/upload', {
+            method: 'POST',
+            body: new FormData(formElem)
+        })
+    })
+</script>
+</html>
